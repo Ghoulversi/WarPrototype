@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Territory : MonoBehaviour
 {
+    public GameObject TerritoryQuad;
     public GameObject WarriorPrefab;
     public TextMeshPro PointsTxtPro;
     //Min and Max range for start points to be set
@@ -14,6 +16,7 @@ public class Territory : MonoBehaviour
 
     public int PointsIncreaseDelay = 1;
     public Material TerritoryMat;
+    public Material TerritoryQuadMat;
     public Renderer TerritoryRenderer;
     public TerritoryType TerritoryType;
 
@@ -30,10 +33,15 @@ public class Territory : MonoBehaviour
         set => _currentPoints = value;
     }
 
+   
+
     private void Start()
     {
         _startScale = gameObject.transform.localScale;
         CurrentPoints = Random.Range(MinRangePoints, MaxRangePoints);
+
+        TerritoryQuad.GetComponent<Renderer>().material = TerritoryQuadMat;
+
     }
 
     protected virtual void Update()
@@ -70,20 +78,21 @@ public class Territory : MonoBehaviour
         if (CurrentPoints < 0) CurrentPoints = 0;
     }
 
-    public void Attacked(int attackingPoints, TerritoryType attackingSide, Material attackingMat)
+    public void Attacked(int attackingPoints, TerritoryType attackingSide, Material attackingMat, Material attackingQuadMat)
     {
-        CurrentPoints -= attackingPoints;
+        if (attackingSide != TerritoryType)
+        {
+            CurrentPoints -= attackingPoints;
+        }
+        else
+        {
+            CurrentPoints += attackingPoints;
+        }
 
         if (CurrentPoints < 0)
         {
-            Debug.Log("Was attacked");
             CurrentPoints = 0;
-            Defeated(attackingSide, attackingMat);
-        }
-
-        if (attackingSide == TerritoryType)
-        {
-            CurrentPoints += attackingPoints;
+            Defeated(attackingSide, attackingMat, attackingQuadMat);
         }
     }
 
@@ -92,31 +101,33 @@ public class Territory : MonoBehaviour
     /// </summary>
     public void ActivateElement()
     {
-        Debug.Log("Activated");
         AnimateElement();
     }
 
     public void StopAnimationElement()
     {
         _sequence.Pause();
-        gameObject.transform.localScale = _startScale;
+        TerritoryRenderer.gameObject.transform.localScale = _startScale;
     }
 
     private void AnimateElement()
     {
         _sequence = DOTween.Sequence();
-        Tween bigger = gameObject.transform.DOScale(_startScale * 1.5f, 1f);
-        Tween smaller = gameObject.transform.DOScale(_startScale, 1f);
+        Tween bigger = TerritoryRenderer.gameObject.transform.DOScale(_startScale * 1.5f, 1f);
+        Tween smaller = TerritoryRenderer.gameObject.transform.DOScale(_startScale, 1f);
         _sequence.Append(bigger);
         _sequence.Append(smaller);
         _sequence.SetLoops(-1);
         _sequence.Play();
     }
 
-    private void Defeated(TerritoryType attackingSide, Material attackingMat)
+    private void Defeated(TerritoryType attackingSide, Material attackingMat, Material attackingQuadMat)
     {
         TerritoryMat = attackingMat;
         TerritoryType = attackingSide;
         TerritoryRenderer.material = attackingMat;
+        TerritoryQuad.GetComponent<Renderer>().material = attackingQuadMat;
+        StopAnimationElement();
+        GameEvents.Instance.DefeatTriggerTerritory();
     }
 }

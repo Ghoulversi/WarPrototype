@@ -26,6 +26,15 @@ public class Warrior : MonoBehaviour
         set => _warriorMat = value;
     }
 
+    private Material _warriorQuadMat;
+    public Material WarriorQuadMat
+    {
+        get => _warriorQuadMat;
+        set => _warriorQuadMat = value;
+    }
+
+
+
     [SerializeField]
     private Territory _territoryToAttack;
     public Territory TerritoryToAttack
@@ -65,12 +74,13 @@ public class Warrior : MonoBehaviour
         _distance = distance;
     }
 
-    public void SetWarrior(int attackingDmg, TerritoryType attackingSide, Material attackingMat, Territory territoryToAttack)
+    public void SetWarrior(int attackingDmg, TerritoryType attackingSide, Material attackingMat, Material attackingQuadMat, Territory territoryToAttack)
     {
         AttackDmg = attackingDmg; 
         WarriorType = attackingSide;
         WarriorMat = attackingMat;
         TerritoryToAttack = territoryToAttack;
+        WarriorQuadMat = attackingQuadMat;
 
         GetComponent<Renderer>().material = WarriorMat;
     }
@@ -82,8 +92,7 @@ public class Warrior : MonoBehaviour
 
         if (other.gameObject == TerritoryToAttack.gameObject)
         {
-            Debug.Log("Attacked");
-            TerritoryToAttack.Attacked(AttackDmg, WarriorType, WarriorMat);
+            TerritoryToAttack.Attacked(AttackDmg, WarriorType, WarriorMat, WarriorQuadMat);
             Destroy(gameObject);
         }
     }

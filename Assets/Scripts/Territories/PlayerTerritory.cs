@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTerritory : Territory
+public class PlayerTerritory : BotTerritory
 {
     public override void SetTextMeshPro()
     {

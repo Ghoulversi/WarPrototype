@@ -55,7 +55,7 @@ public class UserSelection : MonoBehaviour
     {
         if (SelectedFriendlyTerritory == null) return;
 
-        War.Attack(SelectedFriendlyTerritory, territory);
+        War.Attack(SelectedFriendlyTerritory, territory, SelectedFriendlyTerritory.transform);
     }
 
     private void ResetSelectedTerritories()

@@ -6,14 +6,7 @@ using DG.Tweening;
 public class BotTerritory : Territory
 {
     public float TimeBetweenAttacks = 5f;
-
-    private Grid _grid;
     private float _timerWaitingForAttack;
-
-    private void Awake()
-    {
-        _grid = TestScript.Grid;
-    }
 
     protected override void Update()
     {
@@ -33,18 +26,18 @@ public class BotTerritory : Territory
 
             var territoryToAttack = GetTerritoryToAttack();
 
-            if (territoryToAttack.gameObject == null) return;
+            if (territoryToAttack == null) return;
 
-            War.Attack(this, territoryToAttack);
+            War.Attack(this, territoryToAttack, this.gameObject.transform);
         }
     }
 
     private Territory GetTerritoryToAttack()
     {
-        var randomWidth = Random.Range(0, _grid.width);
-        var randomHeight = Random.Range(0, _grid.height);
+        var randomWidth = Random.Range(0, GamePlayManager.Grid.width);
+        var randomHeight = Random.Range(0, GamePlayManager.Grid.height);
 
-        var objToAttack = _grid.GetObjectAtPos(new Vector2(randomWidth, randomHeight));
+        var objToAttack = GamePlayManager.Grid.GetObjectAtPos(new Vector2(randomWidth, randomHeight));
 
         if (objToAttack == null)
         {
@@ -54,7 +47,7 @@ public class BotTerritory : Territory
         var territoryToAttack = objToAttack.GetComponent<Territory>();
 
         if (objToAttack == gameObject || territoryToAttack.TerritoryType == TerritoryType.Enemy)
-            GetTerritoryToAttack();
+            return null;
 
         return territoryToAttack;
     }

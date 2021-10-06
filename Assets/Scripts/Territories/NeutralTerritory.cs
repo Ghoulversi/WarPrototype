@@ -4,20 +4,29 @@ using UnityEngine;
 
 public class NeutralTerritory : BotTerritory
 {
-    public int MaxPoints;
+    [Header("Range for MaxPoints")]
+    public int MaxPointsMin;
+    public int MaxPointsMax;
+
+    private int _currentMaxPoint;
+
+    private void Awake()
+    {
+        _currentMaxPoint = Random.Range(MaxPointsMin, MaxPointsMax);
+    }
 
     public override void UpdatePoints()
     {
         base.UpdatePoints();
 
-        if (CurrentPoints > MaxPoints)
+        if (CurrentPoints > _currentMaxPoint)
         {
-            CurrentPoints = MaxPoints;
+            CurrentPoints = _currentMaxPoint;
         }
     }
 
     public override void SetTextMeshPro()
     {
-        PointsTxtPro.text = $"{CurrentPoints}/{MaxPoints}";
+        PointsTxtPro.text = $"{CurrentPoints}/{_currentMaxPoint}";
     }
 }

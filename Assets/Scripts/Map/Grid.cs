@@ -1,48 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Grid
 {
+    private float _cellSize;
+    public float CellSize 
+    { 
+        get => _cellSize;
+        private set => _cellSize = value;
+    }
+
     public int width;
     public int height;
-    private float cellSize;
-    private int[,] gridArray;
     public GameObject[,] GridTerritories;
 
+
+    /// <summary>
+    /// Create Grid with given width and height, with size of cellSize
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="cellSize"></param>
     public Grid(int width, int height, float cellSize)
     {
         this.width = width;
         this.height = height;
-        this.cellSize = cellSize;
+        this.CellSize = cellSize;
 
         GridTerritories = new GameObject[width, height];
-        gridArray = new int[width, height];
-
-        for (int x = 0; x < gridArray.GetLength(0); x++)
-        {
-            for (int y = 0; y < gridArray.GetLength(1); y++)
-            {
-                var objPos = GetWorldPosition(x, y) + new Vector3(cellSize,.5f, cellSize) * .5f;
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.black, 100f);
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.black, 100f);
-            }
-        }
-        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.black, 100f);
-        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.black, 100f);
     }
 
     private Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, 0, y) * cellSize;
+        return new Vector3(x, 0, y) * CellSize;
     }
 
-    public void SetObjectPos(int x, int y, GameObject spawnObject)
+    /// <summary>
+    /// Spawn <see cref="spawnObject"/> at given position on Grid
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="spawnObject"></param>
+    /// <param name="parent"></param>
+    public void SetObjectPos(int x, int y, GameObject spawnObject, Transform parent)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            var objPos = GetWorldPosition(x, y) + new Vector3(cellSize, .5f, cellSize) * .5f;
-            var territoryObj = GameObject.Instantiate(spawnObject, objPos, Quaternion.identity);
+            var objPos = GetWorldPosition(x, y) + new Vector3(CellSize, .5f, CellSize) * .5f;
+            var territoryObj = GameObject.Instantiate(spawnObject, objPos, Quaternion.identity, parent);
+
+            if (territoryObj.GetComponent<Territory>() != null)
+            {
+                territoryObj.GetComponent<Territory>().TerritoryQuad.transform.localScale *= CellSize;
+            }
+
             GridTerritories[x, y] = territoryObj;
         }
         else
@@ -51,6 +64,12 @@ public class Grid
         }
     }
 
+    /// <summary>
+    /// Get GameObject situated on <see cref="objectPos"/> pos
+    /// Return null in case <see cref="objectPos"/>  out of grid or null object at given Position
+    /// </summary>
+    /// <param name="objectPos">Position on grid</param>
+    /// <returns></returns>
     public GameObject GetObjectAtPos(Vector2 objectPos)
     {
         var x = (int)objectPos.x;
@@ -58,10 +77,37 @@ public class Grid
 
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            var obj = GridTerritories[x, y].gameObject;
-            if (obj != null) return obj;
+            if (GridTerritories[x, y].gameObject != null)
+            {
+                var obj = GridTerritories[x, y].gameObject;
+                return obj;
+            }
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Return true if all map territories are type of <see cref="territoryType"/> 
+    /// </summary>
+    /// <param name="territoryType"></param>
+    /// <returns></returns>
+    public bool IsAllMapOfType(TerritoryType territoryType)
+    {
+        List<GameObject> territories = GridTerritories.Cast<GameObject>().ToList();
+
+        return territories.All(f => f.GetComponent<Territory>().TerritoryType == territoryType);
+    }
+
+    /// <summary>
+    /// Return if <see cref="territoryType"/> is available and exist on map
+    /// </summary>
+    /// <param name="territoryType"></param>
+    /// <returns></returns>
+    public bool IsAnyTypeTerritory(TerritoryType territoryType)
+    {
+        List<GameObject> territories = GridTerritories.Cast<GameObject>().ToList();
+
+        return territories.Any(f => f.GetComponent<Territory>().TerritoryType == TerritoryType.Player);
     }
 }

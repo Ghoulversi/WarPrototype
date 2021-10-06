@@ -49,7 +49,9 @@ public class Warrior : MonoBehaviour
 
     private float _distance;
     private float _startTime;
-    private float _speed = .05f;
+    private float _speed = .01f;
+    private float _delayForStart;
+    private float _currentTimeToStart;
 
     private void Start()
     {
@@ -58,20 +60,28 @@ public class Warrior : MonoBehaviour
 
     private void Update()
     {
-        float distCovered = (Time.time - _startTime) * _speed;
-        float fractionOfJourney = distCovered / _distance;
+        if (_currentTimeToStart < _delayForStart)
+        {
+            _currentTimeToStart += Time.deltaTime;
+        }
+        else
+        {
+            float distCovered = (Time.time - _startTime) * _speed;
+            float fractionOfJourney = distCovered / _distance;
 
-        _currentPos = Vector3.Lerp(_currentPos, _endPos, fractionOfJourney);
+            _currentPos = Vector3.Lerp(_currentPos, _endPos, fractionOfJourney);
 
-        transform.position = _currentPos;
+            transform.position = _currentPos;
+        }
     }
 
-    public void SetPos(Vector3 startPos, Vector3 endPos, float distance)
+    public void SetPos(Vector3 startPos, Vector3 endPos, float distance, float delay)
     {
         _startPos = startPos;
         _endPos = endPos;
         _currentPos = startPos;
         _distance = distance;
+        _delayForStart = delay;
     }
 
     public void SetWarrior(int attackingDmg, TerritoryType attackingSide, Material attackingMat, Material attackingQuadMat, Territory territoryToAttack)

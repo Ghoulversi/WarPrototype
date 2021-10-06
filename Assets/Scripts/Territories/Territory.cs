@@ -19,50 +19,71 @@ public class Territory : MonoBehaviour
 
     public bool IsActivated;
 
+    private float _timer;
     private Vector3 _startScale;
     private Sequence _sequence;
+
     private int _currentPoints;
-    private float _timer;
+    public int CurrentPoints
+    {
+        get => _currentPoints;
+        set => _currentPoints = value;
+    }
 
     private void Start()
     {
         _startScale = gameObject.transform.localScale;
-        _currentPoints = Random.Range(MinRangePoints, MaxRangePoints);
+        CurrentPoints = Random.Range(MinRangePoints, MaxRangePoints);
     }
 
-    private void Update()
+    protected virtual void Update()
+    {
+        UpdatePoints();
+
+        SetTextMeshPro();
+    }
+
+    public virtual void UpdatePoints()
     {
         _timer += Time.deltaTime;
 
         if (_timer >= PointsIncreaseDelay)
         {
             _timer = 0f;
-            _currentPoints++;
+            CurrentPoints++;
         }
+    }
 
-        PointsTxtPro.text = GetPoints().ToString();
+    public virtual void SetTextMeshPro()
+    {
+
     }
 
     public int GetPoints()
     {
-        return _currentPoints;
+        return CurrentPoints;
     }
 
     public void MinusWarriors(int minusWarriors)
     {
-        _currentPoints -= minusWarriors;
-        if (_currentPoints < 0) _currentPoints = 0;
+        CurrentPoints -= minusWarriors;
+        if (CurrentPoints < 0) CurrentPoints = 0;
     }
 
     public void Attacked(int attackingPoints, TerritoryType attackingSide, Material attackingMat)
     {
-        _currentPoints -= attackingPoints;
-        Debug.Log("Was attacked");
+        CurrentPoints -= attackingPoints;
 
-        if (_currentPoints < 0)
+        if (CurrentPoints < 0)
         {
-            _currentPoints = 0;
+            Debug.Log("Was attacked");
+            CurrentPoints = 0;
             Defeated(attackingSide, attackingMat);
+        }
+
+        if (attackingSide == TerritoryType)
+        {
+            CurrentPoints += attackingPoints;
         }
     }
 

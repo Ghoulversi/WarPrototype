@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1558010662038924731}
-  - component: {fileID: 8043222365684467980}
+  - component: {fileID: 2633108389989666637}
   - component: {fileID: 6823578945881615587}
   m_Layer: 0
   m_Name: Neutral
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8043222365684467980
+--- !u!114 &2633108389989666637
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886382800701595417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfeb31484f519c429cb04479dc2cf42, type: 3}
+  m_Script: {fileID: 11500000, guid: 9abd31e85486f1e44a13dad33f0d7ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   WarriorPrefab: {fileID: 317221286451758671, guid: f57755238282e1247a9e99d368fff1f2, type: 3}
@@ -55,6 +55,7 @@ MonoBehaviour:
   TerritoryRenderer: {fileID: 5874791106438128243}
   TerritoryType: 1
   IsActivated: 0
+  MaxPoints: 15
 --- !u!65 &6823578945881615587
 BoxCollider:
   m_ObjectHideFlags: 0

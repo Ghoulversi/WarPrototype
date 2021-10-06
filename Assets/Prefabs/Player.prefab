@@ -260,8 +260,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3498235019839871870}
-  - component: {fileID: 5371761254310576073}
   - component: {fileID: 8908446222476466726}
+  - component: {fileID: 8624879100511170118}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -285,27 +285,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5371761254310576073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4557316747828619740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfeb31484f519c429cb04479dc2cf42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WarriorPrefab: {fileID: 317221286451758671, guid: f57755238282e1247a9e99d368fff1f2, type: 3}
-  PointsTxtPro: {fileID: 6643895936167304053}
-  MinRangePoints: 15
-  MaxRangePoints: 40
-  PointsIncreaseDelay: 1
-  TerritoryMat: {fileID: 2100000, guid: 7b93180dce335d74a880e52015ca3e8e, type: 2}
-  TerritoryRenderer: {fileID: 8400448214270252214}
-  TerritoryType: 0
-  IsActivated: 0
 --- !u!65 &8908446222476466726
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -319,3 +298,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8624879100511170118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4557316747828619740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d42176edcd2ccca479c99767e36aab13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WarriorPrefab: {fileID: 317221286451758671, guid: f57755238282e1247a9e99d368fff1f2, type: 3}
+  PointsTxtPro: {fileID: 6643895936167304053}
+  MinRangePoints: 15
+  MaxRangePoints: 40
+  PointsIncreaseDelay: 1
+  TerritoryMat: {fileID: 2100000, guid: 7b93180dce335d74a880e52015ca3e8e, type: 2}
+  TerritoryRenderer: {fileID: 8400448214270252214}
+  TerritoryType: 0
+  IsActivated: 0

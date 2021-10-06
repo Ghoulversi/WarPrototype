@@ -40,6 +40,7 @@ public class UserSelection : MonoBehaviour
         {
             territory.IsActivated = false;
             territory.StopAnimationElement();
+
             ResetSelectedTerritories();
         }
         else
@@ -52,35 +53,9 @@ public class UserSelection : MonoBehaviour
 
     private void ManipulateOtherTerritory(Territory territory)
     {
-        Attack(territory);
-        Debug.Log("Attacked!!");
-    }
+        if (SelectedFriendlyTerritory == null) return;
 
-    private void Attack(Territory territoryToAttack)
-    {
-        var currentAttackingPoints = SelectedFriendlyTerritory.GetPoints();
-        var currentAttackingType = SelectedFriendlyTerritory.TerritoryType;
-        var currentAttackingMat = SelectedFriendlyTerritory.TerritoryMat;
-        
-        var currentFriendlyTerritoryTransform = SelectedFriendlyTerritory.gameObject.transform;
-        var currentTerritoryToAttackTransform = territoryToAttack.gameObject.transform;
-
-        if (SelectedFriendlyTerritory.WarriorPrefab != null)
-        {
-
-            Debug.Log($"Territory points: {currentAttackingPoints}");
-            for (var x = 0; x < currentAttackingPoints; x++)
-            {
-                var warrior = GameObject.Instantiate(SelectedFriendlyTerritory.WarriorPrefab, SelectedFriendlyTerritory.gameObject.transform.position, Quaternion.identity);
-                warrior.GetComponent<Warrior>().SetWarrior(1, currentAttackingType, currentAttackingMat, territoryToAttack);
-                SelectedFriendlyTerritory.MinusWarriors(1);
-                var distance = Vector3.Distance(currentFriendlyTerritoryTransform.position, currentTerritoryToAttackTransform.position);
-                warrior.transform.DOMove(currentTerritoryToAttackTransform.position, distance / 2);
-            }
-        }
-
-
-        //territoryToAttack.Attacked(currentAttackingPoints, currentAttackingType, currentAttackingMat);
+        War.Attack(SelectedFriendlyTerritory, territory);
     }
 
     private void ResetSelectedTerritories()

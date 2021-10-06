@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour
 {
+    public static Grid Grid;
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;
     public GameObject NeutralPrefab;
@@ -14,9 +15,9 @@ public class TestScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        var grid = new Grid(_width, _height, 5);
-        grid.SetObjectPos(0, 0, PlayerPrefab);
-        grid.SetObjectPos(_width - 1, _height - 1, EnemyPrefab);
+        Grid = new Grid(_width, _height, 5);
+        Grid.SetObjectPos(0, 0, PlayerPrefab);
+        Grid.SetObjectPos(_width - 1, _height - 1, EnemyPrefab);
 
         for (var x = 0; x < _width; x++)
         {
@@ -25,7 +26,7 @@ public class TestScript : MonoBehaviour
                 if ((y == 0 && x == 0) || (x == _width - 1 && y == _height - 1))
                     continue;
 
-                grid.SetObjectPos(x, y, NeutralPrefab);
+                Grid.SetObjectPos(x, y, NeutralPrefab);
             }
         }
     }

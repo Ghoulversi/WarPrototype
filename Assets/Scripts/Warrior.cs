@@ -34,12 +34,36 @@ public class Warrior : MonoBehaviour
         set => _territoryToAttack = value;
     }
 
-    //public Warrior(int attackingDmg, TerritoryType attackingSide, Material attackingMat)
-    //{
-    //    AttackDmg = attackingDmg;
-    //    WarriorType = attackingSide;
-    //    WarriorMat = attackingMat;
-    //}
+    private Vector3 _startPos;
+    private Vector3 _endPos;
+    private Vector3 _currentPos;
+
+    private float _distance;
+    private float _startTime;
+    private float _speed = .05f;
+
+    private void Start()
+    {
+        _startTime = Time.time;
+    }
+
+    private void Update()
+    {
+        float distCovered = (Time.time - _startTime) * _speed;
+        float fractionOfJourney = distCovered / _distance;
+
+        _currentPos = Vector3.Lerp(_currentPos, _endPos, fractionOfJourney);
+
+        transform.position = _currentPos;
+    }
+
+    public void SetPos(Vector3 startPos, Vector3 endPos, float distance)
+    {
+        _startPos = startPos;
+        _endPos = endPos;
+        _currentPos = startPos;
+        _distance = distance;
+    }
 
     public void SetWarrior(int attackingDmg, TerritoryType attackingSide, Material attackingMat, Territory territoryToAttack)
     {
